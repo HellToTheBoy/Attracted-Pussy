@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Valentine Part 2 💖</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="24">💗</text></svg>'), auto;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      text-align: center;
+      max-width: 380px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      animation: popIn 0.8s ease;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      color: #ff4d6d;
+      font-size: 2.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #555;
+      font-size: 1.05rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .no-scene img{
+      width:100%;
+      max-width:320px;
+      border-radius:18px;
+      box-shadow:0 10px 24px rgba(0,0,0,.2);
+      margin: .5rem auto 1rem;
+      display:block;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      padding: 0.75rem 1.6rem;
+      font-size: 1rem;
+      border-radius: 999px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .yes {
+      background: #ff4d6d;
+      color: white;
+      box-shadow: 0 10px 20px rgba(255, 77, 109, 0.4);
+    }
+
+    .no {
+      background: #ffe3ea;
+      color: #ff4d6d;
+    }
+
+    .hearts { position:absolute; inset:0; pointer-events:none; }
+    .heart { position:absolute; font-size:1.2rem; animation: floatUp 6s linear infinite; opacity:.8; }
+
+    @keyframes popIn { from{transform:scale(.8);opacity:0} to{transform:scale(1);opacity:1} }
+    @keyframes floatUp { from{transform:translateY(100vh) scale(.8);opacity:0} 20%{opacity:.9} to{transform:translateY(-10vh) scale(1.2);opacity:0} }
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+
+  <div class="card" id="card">
+    <h1>💖 Whats up My Pretty Girl 💖</h1>
+    <p><strong>You already said yes once…</strong><br>
+    But perfection takes effort 😌<br>
+    So here we are again ✨</p>
+    <div class="buttons">
+      <button class="yes" onclick="goToQuestion()">Continue ✨</button>
+    </div>
+  </div>
+
+  <script>
+    let yesScale = 1;
+    let noShown = false;
+    let noCount = 0;
+    let memeIndex = 0;
+    let yesTextIndex = 0;
+
+    const memeLines = [
+      "Wrong answer 😔",
+      "That wasn’t an option 🤨",
+      "System error. Try again 🔄",
+      "Nice try… but no 😌",
+      "Hmm… suspicious choice 👀"
+    ];
+
+    const yesTexts = [
+      "Obviously 💕",
+      "Duh 💖",
+      "Of course 😌",
+      "U already said yes to me 🙄💘",
+      "Fineee 💗",
+      "Yes. Again. 💞"
+    ];
+
+    const pinks = ['#ffb3c6','#ff8fab','#ff5d8f','#ff4d6d','#ff1f6d'];
+
+    function goToQuestion() {
+      const card = document.getElementById('card');
+      card.innerHTML = `
+        <h1> Hi Sexy 💕</h1>
+        <p>I asked it once, but I want to confirm it again…<br><strong>Will u be my Valentine?</strong></p>
+        <div class="buttons">
+          <button class="yes" id="yesBtn" onclick="sayYes()">${yesTexts[0]}</button>
+          <button class="no" id="noBtn" onclick="handleNo()">No 🙈</button>
+        </div>
+      `;
+    }
+
+    function sayYes() {
+      const card = document.getElementById('card');
+      card.innerHTML = `
+        <h1>Let's Gooooooo Back to Back 💘</h1>
+        <p>Man I can't wait to make new memories with u 💕</p>
+      `;
+      burstHearts();
+    }
+
+    function handleNo() {
+      noCount++;
+      document.body.style.background = pinks[Math.min(noCount - 1, pinks.length - 1)];
+      const card = document.getElementById('card');
+
+      if (!noShown) {
+        noShown = true;
+        card.innerHTML = `
+          <div class="no-scene">
+            <img src="no-warning.jpg" alt="I wouldn't say that if I were you" />
+            <p><strong>I wouldn’t say that if I were you.</strong></p>
+            <div class="buttons">
+              <button class="yes" onclick="goToQuestion()"> Dare u to choose 'No' </button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const noBtn = document.getElementById('noBtn');
+      const yesBtn = document.getElementById('yesBtn');
+      if (!noBtn || !yesBtn) return;
+
+      const meme = memeLines[memeIndex % memeLines.length];
+      memeIndex++;
+
+      let memeEl = document.getElementById('memeLine');
+      if (!memeEl) {
+        memeEl = document.createElement('p');
+        memeEl.id = 'memeLine';
+        memeEl.style.fontWeight = '600';
+        memeEl.style.color = '#ff4d6d';
+        card.insertBefore(memeEl, card.querySelector('.buttons'));
+      }
+      memeEl.textContent = meme;
+
+      yesTextIndex++;
+      yesBtn.textContent = yesTexts[yesTextIndex % yesTexts.length];
+
+      yesScale += 0.2;
+      yesBtn.style.transform = `scale(${yesScale})`;
+
+      const x = Math.random() * 160 - 80;
+      const y = Math.random() * 160 - 80;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+      if (noCount >= 5) {
+        card.innerHTML = `
+          <h1>Decision made 💖</h1>
+          <p>No more choices 😌<br><strong>It’s a YES.</strong></p>
+          <div class="buttons">
+            <button class="yes" onclick="sayYes()">Yes Daddy 💘</button>
+          </div>
+        `;
+      }
+    }
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = '💗';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = 4 + Math.random() * 4 + 's';
+      document.getElementById('hearts').appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+
+    function burstHearts() {
+      for (let i = 0; i < 20; i++) setTimeout(createHeart, i * 100);
+    }
+
+    setInterval(createHeart, 600);
+  </script>
+</body>
+</html>
